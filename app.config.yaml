@@ -1,0 +1,40 @@
+application:
+  actions: actions
+  runtimeManifest:
+    packages:
+      byom:
+        license: Apache-2.0
+        actions:
+          articles:
+            function: actions/articles/index.js
+            web: 'yes'
+            runtime: nodejs:22
+            inputs:
+              LOG_LEVEL: debug
+              aemPublishHost: $AEM_PUBLISH_HOST
+              site: $SITE
+            annotations:
+              require-adobe-auth: false
+              final: true
+          events:
+            function: actions/events/index.js
+            web: 'no'
+            runtime: nodejs:22
+            inputs:
+              LOG_LEVEL: debug
+              aemAdminApiKey: $AEM_ADMIN_API_KEY
+              aemPublishHost: $AEM_PUBLISH_HOST
+              site: $SITE
+            annotations:
+              require-adobe-auth: false
+              final: true
+  events:
+    registrations:
+      Event Registration Default:
+        description: Registration for IO Events
+        events_of_interest:
+          - provider_metadata: aemsites
+            event_codes:
+              - aem.sites.contentFragment.published
+              - aem.sites.contentFragment.unpublished
+        runtime_action: byom/events

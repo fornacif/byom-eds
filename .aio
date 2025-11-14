@@ -1,0 +1,241 @@
+{
+  "project": {
+    "id": "4566206088345509155",
+    "name": "162BabyblueLobster",
+    "title": "BYOM",
+    "org": {
+      "id": "85792",
+      "name": "Adobe AGS128",
+      "ims_org_id": "E96F8BE15694F5C97F000101@AdobeOrg",
+      "details": {
+        "services": [
+          {
+            "name": "Adobe Workfront",
+            "code": "Workfront API",
+            "type": "adobeid"
+          },
+          {
+            "name": "API Mesh for Adobe Developer App Builder",
+            "code": "GraphQLServiceSDK",
+            "type": "adobeid"
+          },
+          {
+            "name": "Adobe Express Embed SDK",
+            "code": "CCEmbedCompanionAPI",
+            "type": "adobeid"
+          },
+          {
+            "name": "AEM Assets Author API",
+            "code": "AEM Assets Author API",
+            "type": "adobeid"
+          },
+          {
+            "name": "AEM Content AI Services",
+            "code": "AEM-Content-AI-API",
+            "type": "adobeid"
+          },
+          {
+            "name": "Frame.io API",
+            "code": "FrameioAPISDK",
+            "type": "adobeid"
+          },
+          {
+            "name": "PDF Embed API",
+            "code": "ViewSDK",
+            "type": "adobeid"
+          },
+          {
+            "name": "Adobe Commerce with Adobe ID",
+            "code": "AdobeCommerceWithAdobeID",
+            "type": "adobeid"
+          },
+          {
+            "name": "AEM Forms Delivery and Runtime API",
+            "code": "FormsDeliveryRuntimeSDK",
+            "type": "adobeid"
+          },
+          {
+            "name": "AEM CS Sites Content Management",
+            "code": "AEM CS Sites Content Management",
+            "type": "adobeid"
+          },
+          {
+            "name": "Lightroom Services",
+            "code": "LightroomPartnersSDK",
+            "type": "adobeid"
+          },
+          {
+            "name": "Adobe Analytics",
+            "code": "AdobeAnalyticsSDK",
+            "type": "analytics"
+          },
+          {
+            "name": "Audience Manager API",
+            "code": "AudienceManagerCustomerSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Asset Compute",
+            "code": "AssetComputeSDK",
+            "type": "entp"
+          },
+          {
+            "name": "AEM CS Sites Content Management",
+            "code": "AEM CS Sites Content Management",
+            "type": "entp"
+          },
+          {
+            "name": "Cloud Manager",
+            "code": "CloudManagerSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Adobe Campaign",
+            "code": "CampaignSDK",
+            "type": "entp"
+          },
+          {
+            "name": "I/O Management API",
+            "code": "AdobeIOManagementAPISDK",
+            "type": "entp"
+          },
+          {
+            "name": "Content AI (Beta)",
+            "code": "Sensei Enterprise Beta (MAX 2018)",
+            "type": "entp"
+          },
+          {
+            "name": "AEM Content AI Services",
+            "code": "AEM-Content-AI-API",
+            "type": "entp"
+          },
+          {
+            "name": "Experience Platform API",
+            "code": "McDataServicesSdk",
+            "type": "entp"
+          },
+          {
+            "name": "Smart Content",
+            "code": "MCSmartContentServicesSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Audio-Video-API (Public Beta) - Firefly Services",
+            "code": "Audio Video APIs - Public Beta Program",
+            "type": "entp"
+          },
+          {
+            "name": "Adobe Status API",
+            "code": "StatusAPISDK",
+            "type": "entp"
+          },
+          {
+            "name": "Remove Background - Firefly and Creative Cloud Automation",
+            "code": "ImageCutoutV2SDK",
+            "type": "entp"
+          },
+          {
+            "name": "Primetime Ad Insertion",
+            "code": "Ad Config Service",
+            "type": "entp"
+          },
+          {
+            "name": "Privacy Service API",
+            "code": "McGdprSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Places",
+            "code": "McPlacesSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Lightroom API - Firefly Services",
+            "code": "LightroomCCESDK",
+            "type": "entp"
+          },
+          {
+            "name": "Globalization Content Service",
+            "code": "gcs-partner",
+            "type": "entp"
+          },
+          {
+            "name": "Experience Cloud Setup Automation",
+            "code": "DxSetupAutomationSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Assurance API",
+            "code": "Griffon - Graffias",
+            "type": "entp"
+          },
+          {
+            "name": "Adobe Target",
+            "code": "AdobeTargetSDK",
+            "type": "entp"
+          },
+          {
+            "name": "AEM Forms Delivery and Runtime API",
+            "code": "FormsDeliveryRuntimeSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Photoshop API - Firefly Services",
+            "code": "PhotoshopCCESDK",
+            "type": "entp"
+          },
+          {
+            "name": "User Management API",
+            "code": "UserMgmtSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Experience Platform Launch API",
+            "code": "McDtmSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Adobe I/O Events for Adobe Commerce",
+            "code": "commerceeventing",
+            "type": "entp"
+          },
+          {
+            "name": "I/O Events",
+            "code": "CloudIntegrationSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Adobe Analytics",
+            "code": "AdobeAnalyticsSDK",
+            "type": "entp"
+          },
+          {
+            "name": "Adobe Workfront",
+            "code": "Workfront API",
+            "type": "entp"
+          },
+          {
+            "name": "AEM Assets Author API",
+            "code": "AEM Assets Author API",
+            "type": "entp"
+          }
+        ]
+      }
+    },
+    "workspace": {
+      "id": "4566206088345536788",
+      "name": "Stage",
+      "title": "Stage",
+      "action_url": "https://85792-162babybluelobster-stage.adobeioruntime.net",
+      "app_url": "https://85792-162babybluelobster-stage.adobeio-static.net",
+      "details": {
+        "credentials": [],
+        "services": [],
+        "events": {
+          "registrations": []
+        },
+        "mesh": {}
+      }
+    }
+  }
+}
