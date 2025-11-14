@@ -21,14 +21,23 @@ const main = async params => {
   
   const locale = lang === 'en' ? 'us/en' : `${lang}/${lang}`;
 
-  await fetch(`https://admin.hlx.page/preview/fornacif/${site}/main/${locale}/pages/articles`, {
+  let pageName = '';
+  if (path.includes('/articles')) {
+    pageName = 'articles';
+  } else if (path.includes('/products')) {
+    pageName = 'products';
+  } else {
+    return;
+  }
+
+  await fetch(`https://admin.hlx.page/preview/fornacif/${site}/main/${locale}/pages/${pageName}`, {
     method: 'POST',
     headers: {
       'X-Auth-Token': params.aemAdminApiKey
     }
   });
 
-  await fetch(`https://admin.hlx.page/live/fornacif/${site}/main/${locale}/pages/articles`, {
+  await fetch(`https://admin.hlx.page/live/fornacif/${site}/main/${locale}/pages/${pageName}`, {
     method: 'POST',
     headers: {
       'X-Auth-Token': params.aemAdminApiKey

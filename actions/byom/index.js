@@ -65,7 +65,7 @@ async function main (params) {
   console.log('Params:', JSON.stringify(params));
   const path = params['__ow_path'];
 
-  if (path && !path.endsWith('/pages/articles')) {
+  if (!path || (!path.endsWith('/pages/articles') && !path.endsWith('/pages/products'))) {
     return {
       statusCode: 404
     }
@@ -74,34 +74,30 @@ async function main (params) {
   const site = params.site;
   const lang = extractPathElement(path, 2);
   const locale = lang === 'en' ? 'us/en' : `${lang}/${lang}`;
-  
 
-  // Fetch the template HTML
-  const templateResponse = await fetch(`https://main--${site}--fornacif.aem.live/${locale}/templates/articles.plain.html`);
-  let templateHTML = await templateResponse.text();
+  let templateHTML;
 
-  // Fetch translations and articles
-  const [translations, articles] = await Promise.all([
-    fetchTranslations(site),
-    fetchArticles(params.aemPublishHost, site, lang)
-  ]);
+  if (path.endsWith('/pages/products')) {
+    const templateResponse = await fetch(`https://main--${site}--fornacif.aem.live/${locale}/templates/products.plain.html`);
+    templateHTML = await templateResponse.text();
+  } else if (path.endsWith('/pages/articles')) {
+    const templateResponse = await fetch(`https://main--${site}--fornacif.aem.live/${locale}/templates/articles.plain.html`);
+    templateHTML = await templateResponse.text();
 
-  let articlesHTML = '<div>No articles found.</div>';
+    // Fetch translations and articles
+    const [translations, articles] = await Promise.all([
+      fetchTranslations(site),
+      fetchArticles(params.aemPublishHost, site, lang)
+    ]);
 
-  if (articles.length === 0) {
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'text/html'
-      },
-      body: { articlesHTML}
+    if (articles.length === 0) {
+      templateHTML = '<div>No articles found.</div>'
+    } else {
+      articlesHTML = articles.map(article => buildArticleCard(article, translations, lang)).join('');
+      const articlesRegex = /(<div class="articles">)([\s\S]*?)(<\/div>)/;
+      templateHTML = templateHTML.replace(articlesRegex, `$1${articlesHTML}$3`);
     }
   }
-
-  articlesHTML = articles.map(article => buildArticleCard(article, translations, lang)).join('');
-
-  const articlesRegex = /(<div class="articles">)([\s\S]*?)(<\/div>)/;
-  templateHTML = templateHTML.replace(articlesRegex, `$1${articlesHTML}$3`);
 
   return {
     statusCode: 200,

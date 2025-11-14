@@ -5,8 +5,8 @@ application:
       byom:
         license: Apache-2.0
         actions:
-          3ds-articles:
-            function: actions/articles/index.js
+          3ds-byom:
+            function: actions/byom/index.js
             web: 'yes'
             runtime: nodejs:22
             inputs:
@@ -28,8 +28,8 @@ application:
             annotations:
               require-adobe-auth: false
               final: true
-          gs-articles:
-            function: actions/articles/index.js
+          gs-byom:
+            function: actions/byom/index.js
             web: 'yes'
             runtime: nodejs:22
             inputs:
