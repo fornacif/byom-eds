@@ -30,8 +30,18 @@ function buildArticleCard(article, translations, lang) {
   `;
 }
 
-function buildProductCard(product) {
-  const shortDescription = product.custom_attributes?.[16]?.value || '';
+function buildProductCard(product, commerceHost) {
+  // Find short_description by attribute_code
+  let shortDescription = '';
+  if (product.custom_attributes) {
+    const shortDescAttr = Object.values(product.custom_attributes).find(
+      attr => attr.attribute_code === 'short_description'
+    );
+    shortDescription = shortDescAttr?.value || '';
+  }
+
+  const imageFile = product.media_gallery_entries?.[0]?.file || '';
+  const imageUrl = imageFile ? `${commerceHost}/media/catalog/product${imageFile}` : '';
 
   return `
     <div>
@@ -47,6 +57,11 @@ function buildProductCard(product) {
       <div>
         <p>$${product.price}</p>
       </div>
+      ${imageUrl ? `<div>
+        <picture>
+          <img loading="lazy" alt="${product.name}" src="${imageUrl}">
+        </picture>
+      </div>` : ''}
     </div>
   `;
 }
@@ -77,12 +92,13 @@ async function fetchArticles(host, site, lang) {
   return data.data.articleList.items || [];
 }
 
-async function fetchProducts(commerceHost, categoryId) {
-  const url = `${commerceHost}/rest/V1/products?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${categoryId}&fields=items[id,sku,name,price,custom_attributes[short_description]]`;
+async function fetchProducts(commerceHost, commerceBearerToken, categoryId) {
+  const url = `${commerceHost}/rest/V1/products?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${categoryId}&fields=items[id,sku,name,price,media_gallery_entries,custom_attributes[short_description]]`;
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
+      'Authorization': `Bearer ${commerceBearerToken}`,
       'Content-Type': 'application/json'
     }
   });
@@ -119,7 +135,7 @@ function extractProductsMetadata(html) {
 }
 
 async function main (params) {
-  console.log('Params:', JSON.stringify(params));
+  //console.log('Params:', JSON.stringify(params));
   const path = params['__ow_path'];
 
   if (!path || (!path.endsWith('/pages/articles') && !path.endsWith('/pages/products'))) {
@@ -142,14 +158,14 @@ async function main (params) {
     console.log('Products metadata:', JSON.stringify(metadata));
 
     // Fetch products from commerce API
-    const products = await fetchProducts(params.commerceHost, metadata.commerceCategory);
-
+    const products = await fetchProducts(params.commerceHost, params.commerceBearerToken, metadata.commerceCategory);
+    
     if (products.length === 0) {
       templateHTML = '<div>No products found.</div>';
     } else {
-      const productsHTML = products.map(product => buildProductCard(product)).join('');
-      const productsRegex = /(<div class="products">)([\s\S]*?)(<\/div>)/;
-      templateHTML = templateHTML.replace(productsRegex, `$1${productsHTML}$3`);
+      const productsHTML = products.map(product => buildProductCard(product, params.commerceHost)).join('');
+      const productsRegex = /(<div class="products">)[\s\S]*?(<\/div>\s*<\/div>)/;
+      templateHTML = templateHTML.replace(productsRegex, `$1\n${productsHTML}\n  $2`);
     }
   } else if (path.endsWith('/pages/articles')) {
     const templateResponse = await fetch(`https://main--${site}--fornacif.aem.live/${locale}/templates/articles.plain.html`);
