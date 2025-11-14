@@ -4,13 +4,9 @@ function extractPathElement(path, position) {
 }
 
 const main = async params => {
-  const site = params.site;
   const path = params.data.path;
 
-  if (!path || !path.includes(`/${site}/`)) {
-    return; 
-  }
-
+  let site = path.startsWith('/content/dam') ? extractPathElement(path, 3) : extractPathElement(path, 2);
   let lang = 'en';
   
   if (path.startsWith(`/content/${site}/`)) {

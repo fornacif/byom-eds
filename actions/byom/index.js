@@ -30,6 +30,27 @@ function buildArticleCard(article, translations, lang) {
   `;
 }
 
+function buildProductCard(product) {
+  const shortDescription = product.custom_attributes?.[16]?.value || '';
+
+  return `
+    <div>
+      <div>
+        <p>${product.name}</p>
+      </div>
+      <div>
+        <p>${product.sku}</p>
+      </div>
+      <div>
+        <p>${shortDescription}</p>
+      </div>
+      <div>
+        <p>$${product.price}</p>
+      </div>
+    </div>
+  `;
+}
+
 async function fetchTranslations(site) {
   const response = await fetch(`https://main--${site}--fornacif.aem.live/i18n.json`);
   if (!response.ok) {
@@ -56,9 +77,45 @@ async function fetchArticles(host, site, lang) {
   return data.data.articleList.items || [];
 }
 
+async function fetchProducts(commerceHost, categoryId) {
+  const url = `${commerceHost}/rest/V1/products?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${categoryId}&fields=items[id,sku,name,price,custom_attributes[short_description]]`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch products: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.items || [];
+}
+
 function extractPathElement(path, position) {
   const parts = path.split('/').filter(part => part !== '');
   return parts.length > position ? parts[position -1] : null;
+}
+
+function extractProductsMetadata(html) {
+  const metadata = {};
+
+  // Extract title
+  const titleMatch = html.match(/<div>title<\/div>\s*<div>([^<]+)<\/div>/);
+  if (titleMatch) {
+    metadata.title = titleMatch[1];
+  }
+
+  // Extract commerce-category
+  const categoryMatch = html.match(/<div>commerce-category<\/div>\s*<div>([^<]+)<\/div>/);
+  if (categoryMatch) {
+    metadata.commerceCategory = categoryMatch[1];
+  }
+
+  return metadata;
 }
 
 async function main (params) {
@@ -80,6 +137,20 @@ async function main (params) {
   if (path.endsWith('/pages/products')) {
     const templateResponse = await fetch(`https://main--${site}--fornacif.aem.live/${locale}/templates/products.plain.html`);
     templateHTML = await templateResponse.text();
+
+    const metadata = extractProductsMetadata(templateHTML);
+    console.log('Products metadata:', JSON.stringify(metadata));
+
+    // Fetch products from commerce API
+    const products = await fetchProducts(params.commerceHost, metadata.commerceCategory);
+
+    if (products.length === 0) {
+      templateHTML = '<div>No products found.</div>';
+    } else {
+      const productsHTML = products.map(product => buildProductCard(product)).join('');
+      const productsRegex = /(<div class="products">)([\s\S]*?)(<\/div>)/;
+      templateHTML = templateHTML.replace(productsRegex, `$1${productsHTML}$3`);
+    }
   } else if (path.endsWith('/pages/articles')) {
     const templateResponse = await fetch(`https://main--${site}--fornacif.aem.live/${locale}/templates/articles.plain.html`);
     templateHTML = await templateResponse.text();

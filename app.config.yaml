@@ -11,20 +11,10 @@ application:
             runtime: nodejs:22
             inputs:
               LOG_LEVEL: debug
-              aemPublishHost: $AEM_PUBLISH_HOST
               site: 3ds
-            annotations:
-              require-adobe-auth: false
-              final: true
-          3ds-events:
-            function: actions/events/index.js
-            web: 'no'
-            runtime: nodejs:22
-            inputs:
-              LOG_LEVEL: debug
-              aemAdminApiKey: $AEM_ADMIN_API_KEY
               aemPublishHost: $AEM_PUBLISH_HOST
-              site: 3ds
+              commerceHost: $COMMERCE_HOST
+              commerceBearerToken: $COMMERCE_BEARER_TOKEN
             annotations:
               require-adobe-auth: false
               final: true
@@ -34,12 +24,14 @@ application:
             runtime: nodejs:22
             inputs:
               LOG_LEVEL: debug
-              aemPublishHost: $AEM_PUBLISH_HOST
               site: gs
+              aemPublishHost: $AEM_PUBLISH_HOST
+              commerceHost: $COMMERCE_HOST
+              commerceBearerToken: $COMMERCE_BEARER_TOKEN
             annotations:
               require-adobe-auth: false
               final: true
-          gs-events:
+          events:
             function: actions/events/index.js
             web: 'no'
             runtime: nodejs:22
@@ -47,13 +39,12 @@ application:
               LOG_LEVEL: debug
               aemAdminApiKey: $AEM_ADMIN_API_KEY
               aemPublishHost: $AEM_PUBLISH_HOST
-              site: gs
             annotations:
               require-adobe-auth: false
               final: true
   events:
     registrations:
-      3DS Event Registration:
+      Event Registration:
         description: Registration for IO Events
         events_of_interest:
           - provider_metadata: aemsites
@@ -61,12 +52,4 @@ application:
               - aem.sites.contentFragment.published
               - aem.sites.contentFragment.unpublished
               - aem.sites.page.published
-        runtime_action: byom/3ds-events
-      GS Event Registration:
-        description: Registration for IO Events
-        events_of_interest:
-          - provider_metadata: aemsites
-            event_codes:
-              - aem.sites.contentFragment.published
-              - aem.sites.contentFragment.unpublished
-        runtime_action: byom/gs-events
+        runtime_action: byom/events
