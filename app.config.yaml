@@ -5,18 +5,18 @@ application:
       byom:
         license: Apache-2.0
         actions:
-          articles:
+          3ds-articles:
             function: actions/articles/index.js
             web: 'yes'
             runtime: nodejs:22
             inputs:
               LOG_LEVEL: debug
               aemPublishHost: $AEM_PUBLISH_HOST
-              site: $SITE
+              site: 3ds
             annotations:
               require-adobe-auth: false
               final: true
-          events:
+          3ds-events:
             function: actions/events/index.js
             web: 'no'
             runtime: nodejs:22
@@ -24,7 +24,7 @@ application:
               LOG_LEVEL: debug
               aemAdminApiKey: $AEM_ADMIN_API_KEY
               aemPublishHost: $AEM_PUBLISH_HOST
-              site: $SITE
+              site: 3ds
             annotations:
               require-adobe-auth: false
               final: true
@@ -37,4 +37,4 @@ application:
             event_codes:
               - aem.sites.contentFragment.published
               - aem.sites.contentFragment.unpublished
-        runtime_action: byom/events
+        runtime_action: byom/3ds-events
