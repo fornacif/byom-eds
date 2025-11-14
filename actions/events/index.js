@@ -6,7 +6,19 @@ function extractPathElement(path, position) {
 const main = async params => {
   const site = params.site;
   const path = params.data.path;
-  const lang = extractPathElement(path, 5);
+
+  if (!path || !path.includes(`/${site}/`)) {
+    return; 
+  }
+
+  let lang = 'en';
+  
+  if (path.startsWith(`/content/${site}/`)) {
+    lang = extractPathElement(path, 4);
+  } else {
+    lang = extractPathElement(path, 5);
+  }
+  
   const locale = lang === 'en' ? 'us/en' : `${lang}/${lang}`;
 
   await fetch(`https://admin.hlx.page/preview/fornacif/${site}/main/${locale}/pages/articles`, {
